@@ -1,3 +1,6 @@
+#Overall accuracy on training set:0.992345452
+#Overall accuracy on testing set:0.978100002
+
 from __future__ import print_function
 
 from tensorflow.examples.tutorials.mnist import input_data
@@ -15,7 +18,7 @@ import tensorflow as tf
 class Config(object):
 	def __init__(self):
 		self.trainFlag = True
-		self.restore_from_checkpoint = True
+		self.restore_from_checkpoint = False
 		self.learning_rate = 0.1
 		self.batch_size = 100
 		self.display_step = 1
@@ -56,8 +59,8 @@ class MLPModel(object):
 			# calc cost
 			global_step = tf.Variable(0, name="global_step_cnn", trainable=False)
 			self.cost = tf.nn.softmax_cross_entropy_with_logits(logits=self.output, labels=self.y)
-			self.optimizer = tf.train.GradientDescentOptimizer(config.learning_rate).minimize(self.cost, global_step=global_step)
 			self.avgcost = tf.reduce_mean(self.cost)
+			self.optimizer = tf.train.GradientDescentOptimizer(config.learning_rate).minimize(self.avgcost, global_step=global_step)
 			# for test
 			self.correct_prediction = tf.equal( tf.argmax(self.output, 1), tf.argmax(self.y, 1) )
 			self.accuracy = tf.reduce_mean(tf.cast(self.correct_prediction, "float")) 
