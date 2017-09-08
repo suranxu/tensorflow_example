@@ -1,3 +1,6 @@
+# epoch 9: accuracy=0.995145459
+# testing set overall accuracy 0.992200017
+
 from __future__ import print_function
 
 from tensorflow.examples.tutorials.mnist import input_data
@@ -9,10 +12,10 @@ import tensorflow as tf
 
 class Config(object):
 	def __init__(self):
-		self.trainFlag = False
+		self.trainFlag = True
 		self.restore_from_checkpoint = False
 		self.learning_rate = 0.1
-		self.batch_size = 100
+		self.batch_size = 128
 		self.display_step = 1
 		self.training_epochs = 10
 		self.dropout = 0.7
@@ -99,11 +102,12 @@ if __name__ == "__main__":
 						avgacc += acc / total_batch
 					print("epoch %d:" % i, "accuracy=%.9f" % avgacc)
 					saver.save(sess, "mnistCNNModel.dat")
+				# too large to run in one batch
+				#print("training set overall accuracy %.9f" % sess.run(m.accuracy, feed_dict={m.x:mnist.train.images, m.y:mnist.train.labels, m.dropout: 1.0}) )
+				print("testing set overall accuracy %.9f" % sess.run(m.accuracy, feed_dict={m.x:mnist.test.images, m.y:mnist.test.labels, m.dropout:1.0}))
 			else:
 				acc = sess.run(m.accuracy, feed_dict={m.x:mnist.test.images, m.y: mnist.test.labels, m.dropout:1.0})
 				print ("test result, accuracy=%.9f" % acc)
-
-
 
 
 
